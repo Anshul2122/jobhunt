@@ -21,14 +21,22 @@ export const register = async (req, res) => {
     }
     const hashedpassword = await bcrypt.hash(password, 10);
 
-    await user.create({ fullname, email, phoneNumber, hashedpassword, role });
+    await User.create({
+      fullname,
+      email,
+      phoneNumber,
+      password: hashedpassword,
+      role,
+    });
     return res.status(200).json({
       message: "account created successfully",
       success: true,
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).send(json());
+    return res
+      .status(500)
+      .json({ message: "error creating account", success: false });
   }
 };
 
@@ -106,15 +114,16 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    const file = req.file;
-    if (!fullname || !email || !phoneNumber || !bio || !skills) {
-      return res.status(400).json({
-        message: "something went wrong",
-        success: false,
-      });
-    }
+    // const file = req.file;
+    // if (!fullname || !email || !phoneNumber || !bio || !skills) {
+    //   return res.status(400).json({
+    //     message: "something went wrong",
+    //     success: false,
+    //   });
+    // }
 
-    const skillsArray = skills.split(", ");
+    let skillsArray;
+    if (skills) skillsArray = skills.split(", ");
     const userId = req.id; // ye middleware authentication se aayega
     let user = await User.findById(userId);
 
@@ -125,11 +134,11 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    user.fullname = fullname;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
-    user.profile.bio = bio;
-    user.skills = skillsArray;
+    if (fullname) user.fullname = fullname;
+    if (email) user.email = email;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = skillsArray;
 
     await user.save();
     user = {
