@@ -13,6 +13,7 @@ export const postJob = async (req, res) => {
       position,
       companyId,
     } = req.body;
+    // console.log(title, description, requirements, salary, experienceLevel, location, jobType, position, companyId);
     const userId = req.id;
     if (
       !title ||

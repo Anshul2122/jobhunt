@@ -2,6 +2,7 @@ import { Company } from "./../models/company.model.js";
 export const registerCompany = async (req, res) => {
   try {
     const { companyName } = req.body;
+    // console.log(companyName);
     if (!companyName) {
       return res
         .status(400)
@@ -34,7 +35,9 @@ export const registerCompany = async (req, res) => {
 export const getCompany = async (req, res) => {
   try {
     const userId = req.id;
+    // console.log(userId);
     const companies = await Company.find({ userId });
+    // console.log(userId, companies);
     if (!companies) {
       return res
         .status(404)
@@ -53,6 +56,7 @@ export const getCompanyById = async (req, res) => {
   try {
     const companyId = req.params.id;
     const company = await Company.findById(companyId);
+    // console.log(company, companyId);
     if (!company) {
       return res.status(404).json({
         message: "company not found",
@@ -76,6 +80,7 @@ export const updateCompany = async (req, res) => {
     const company = await Company.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
     });
+    // console.log(company, name, description, website, location);
 
     if (!company) {
       return res.status(404).json({

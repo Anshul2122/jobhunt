@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-
+    // console.log(fullname, email, phoneNumber, password, role);
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
         message: "fill all feilds",
@@ -43,6 +43,13 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
+    if (!password || !email || !role) {
+      return res.status(400).json({
+        message: "password is required",
+        success: false,
+      });
+    }
+    console.log(email, password, role);
     let user = await User.findOne({ email });
     if (!user) {
       return res
@@ -114,13 +121,7 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    // const file = req.file;
-    // if (!fullname || !email || !phoneNumber || !bio || !skills) {
-    //   return res.status(400).json({
-    //     message: "something went wrong",
-    //     success: false,
-    //   });
-    // }
+    //console.log(fullname, email, phoneNumber, bio, skills);
 
     let skillsArray;
     if (skills) skillsArray = skills.split(", ");
