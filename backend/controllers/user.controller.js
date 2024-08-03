@@ -1,16 +1,27 @@
 import { User } from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import getDataUri from "../utils/datauri.js";
+import cloudinary from "../utils/cloudinary.js";
+
+
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-    // console.log(fullname, email, phoneNumber, password, role);
+     console.log(fullname, email, phoneNumber, password, role);
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
         message: "fill all feilds",
         success: false,
       });
     }
+
+    const file = req.file;
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+    console.log(cloudResponse.url);
+    
+
 
     const user = await User.findOne({ email });
     if (user) {
@@ -27,11 +38,16 @@ export const register = async (req, res) => {
       phoneNumber,
       password: hashedpassword,
       role,
+      profile:{
+        profilePhoto:cloudResponse.secure_url,
+      }
     });
+    
     return res.status(200).json({
       message: "account created successfully",
       success: true,
     });
+    
   } catch (error) {
     console.log(error);
     return res
@@ -43,7 +59,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    if (!password || !email || !role) {
+    if (!email || !password || !role) {
       return res.status(400).json({
         message: "password is required",
         success: false,
@@ -56,7 +72,7 @@ export const login = async (req, res) => {
         .status(400)
         .json({ message: "user not found", success: false });
     }
-    const isPasswordMatch = bcrypt.hash(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       return res.status(400).json({
         message: "invalid password",
@@ -121,10 +137,14 @@ export const logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
-    //console.log(fullname, email, phoneNumber, bio, skills);
+    const file = req.file;
+    const fileURI = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
+
+    console.log(fullname, email, phoneNumber, bio, skills);
 
     let skillsArray;
-    if (skills) skillsArray = skills.split(", ");
+    if (skills) skillsArray = skills.split(",");
     const userId = req.id; // ye middleware authentication se aayega
     let user = await User.findById(userId);
 
@@ -140,6 +160,12 @@ export const updateProfile = async (req, res) => {
     if (phoneNumber) user.phoneNumber = phoneNumber;
     if (bio) user.profile.bio = bio;
     if (skills) user.profile.skills = skillsArray;
+
+    if(cloudResponse){
+      user.profile.resume = cloudResponse.secure_url;
+      user.profile.resumeOriginalName = file.originalname;
+    }
+    console.log(user.profile.resumeOriginalName);
 
     await user.save();
     user = {

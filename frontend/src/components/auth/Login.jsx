@@ -37,11 +37,12 @@ const Login = () => {
         withCredentials: true,
       });
       if (res.data.success) {
-        toast.success(res.data.message);
         dispatch(setUser(res.data.user));
         navigate("/");
+        toast.success(res.data.message);
       }
     } catch (error) {
+      toast.error(error.response.data.message);
       console.log(error);
     } finally {
       dispatch(setLoading(false));
@@ -88,7 +89,7 @@ const Login = () => {
                   <Input
                     type="radio"
                     name="role"
-                    value="student"
+                    value="recruiter"
                     className="cursor-pointer"
                     checked={input.role === "recruiter"}
                     onChange={changeEventHandler}

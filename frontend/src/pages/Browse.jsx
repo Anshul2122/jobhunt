@@ -1,6 +1,6 @@
 import React from "react";
-import Navbar from "./shared/Navbar";
-import Job from "./Job";
+import Navbar from "../components/shared/Navbar";
+import Job from "../components/Job";
 const randomJobs = [1, 2, 3, 4, 5, 6, 7, 8];
 const Browse = () => {
   return (
