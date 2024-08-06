@@ -11,24 +11,26 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { setUser } from "@/redux/authSlice";
 
 const Navbar = () => {
-  const navigate =  useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((store) => store.auth);
-  const logoutHandler = async()=>{
+  const logoutHandler = async () => {
     try {
-      const res = await axios.get(`${USER_API_END_POINT}/logout`, {withCredentials:true});
-      if(res.data.success){
+      const res = await axios.get(`${USER_API_END_POINT}/logout`, {
+        withCredentials: true,
+      });
+      if (res.data.success) {
         dispatch(setUser(null));
-        navigate('/login');
+        navigate("/login");
         toast.success(res.data.message);
       }
-      if(!res.data.success){
+      if (!res.data.success) {
         console.log("error in logout");
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <div className="bg-white shadow-sm pb-1">
       <div className="flex items-center justify-between mx-auto max-w-7xl max-h-16">
@@ -39,24 +41,34 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-12">
           <ul className="flex font-medium items-center gap-5">
-            <li className="">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="">
-              <Link to="/jobs">Jobs</Link>
-            </li>
-            <li className="">
-              <Link to="/browse">Browse</Link>
-            </li>
+            {user && user?.role === "recruiter" ? (
+              <>
+                <li className="">
+                  <Link to="/admin/company">Companies</Link>
+                </li>
+                <li className="">
+                  <Link to="/admin/jobs">Jobs</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="">
+                  <Link to="/">Home</Link>
+                </li>
+                <li className="">
+                  <Link to="/jobs">Jobs</Link>
+                </li>
+                <li className="">
+                  <Link to="/browse">Browse</Link>
+                </li>
+              </>
+            )}
           </ul>
           {user ? (
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar className="cursor-pointer">
-                  <AvatarImage
-                    src={user.profile.profilePhoto}
-                    alt="@shadcn"
-                  />
+                  <AvatarImage src={user.profile.profilePhoto} alt="@shadcn" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </PopoverTrigger>
@@ -76,15 +88,19 @@ const Navbar = () => {
                   </div>
                 </div>
                 <div className="flex flex-col   text-gray-600">
-                  <div className="flex w-fit items-center gap-2 cursor-pointer">
-                    <User2 />
-                    <Button variant="link">
-                      <Link to="/profile">profile</Link>
-                    </Button>
-                  </div>
+                  {user && user.role === "student" && (
+                    <div className="flex w-fit items-center gap-2 cursor-pointer">
+                      <User2 />
+                      <Button variant="link">
+                        <Link to="/profile">profile</Link>
+                      </Button>
+                    </div>
+                  )}
                   <div className="flex w-fit items-center gap-2 cursor-pointer">
                     <LogOut />
-                    <Button onClick={logoutHandler} variant="link">logout</Button>
+                    <Button onClick={logoutHandler} variant="link">
+                      logout
+                    </Button>
                   </div>
                 </div>
               </PopoverContent>
