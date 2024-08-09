@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./../shared/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -23,7 +23,7 @@ const Login = () => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
   const navigate = useNavigate();
-  const { loading } = useSelector((store) => store.auth);
+  const { loading, user } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
   const submithandler = async (e) => {
     e.preventDefault();
@@ -47,6 +47,12 @@ const Login = () => {
     } finally {
       dispatch(setLoading(false));
     }
+    useEffect(()=>{
+      if(user){
+        navigate("/");
+        toast.success("Welcome back!");
+      }
+    },[]);
   };
   return (
     <div>
