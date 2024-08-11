@@ -8,6 +8,8 @@ import userRoute from "./routes/user.route.js";
 import companyRoute from "./routes/company.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
+
+
 const app = express();
 
 const PORT = process.env.PORT || 4000;
@@ -16,7 +18,6 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
 const corsOptions = {
   origin: "http://localhost:5173",
   credentials: true,
@@ -26,19 +27,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Log each request route
-app.use((req, res, next) => {
-  console.log(
-    "----------------------------------------------------------------------------------"
-  );
-  console.log(`Route being hit: ${req.method} ${req.path}`);
-  console.log("Req Body", req.body);
-  console.log("Req Params", req.params);
-  console.log("Req Query", req.query);
-  console.log(
-    "----------------------------------------------------------------------------------"
-  );
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log(
+//     "----------------------------------------------------------------------------------"
+//   );
+//   console.log(`Route being hit: ${req.method} ${req.path}`);
+//   console.log("Req Body", req.body);
+//   console.log("Req Params", req.params);
+//   console.log("Req Query", req.query);
+//   console.log(
+//     "----------------------------------------------------------------------------------"
+//   );
+//   next();
+// });
 
 //route handlers
 app.use("/api/v1/user", userRoute);

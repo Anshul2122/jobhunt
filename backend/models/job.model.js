@@ -13,7 +13,7 @@ const jobSchema = new mongoose.Schema(
     requirements: [
       {
         type: String,
-      },
+      }
     ],
     salary: {
       type: Number,
@@ -35,7 +35,7 @@ const jobSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    companyId: {
+    company: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
       required: true,
@@ -49,8 +49,8 @@ const jobSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Application",
-      },
-    ],
+      }
+    ]
   },
   { timestamps: true }
 );
