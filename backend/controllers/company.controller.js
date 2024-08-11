@@ -28,9 +28,6 @@ export const registerCompany = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "registration error", success: false });
   }
 };
 
@@ -48,9 +45,6 @@ export const getCompany = async (req, res) => {
     return res.status(200).json({ companies, success: true });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "error getting company", success: false });
   }
 };
 
@@ -68,17 +62,14 @@ export const getCompanyById = async (req, res) => {
     return res.status(200).json({ company, success: true });
   } catch (error) {
     console.log(error);
-    return res
-      .status(404)
-      .json({ message: "something  went wrong", success: false });
   }
 };
 
 export const updateCompany = async (req, res) => {
   try {
     const { name, description, website, location } = req.body;
-    const file=  req.file;
 
+    const file = req.file;
     const fileUri = getDataUri(file);
     const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
     const logo = cloudResponse.secure_url;

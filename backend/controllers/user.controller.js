@@ -4,11 +4,10 @@ import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
 
-
 export const register = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, password, role } = req.body;
-     console.log(fullname, email, phoneNumber, password, role);
+     // console.log(fullname, email, phoneNumber, password, role);
     if (!fullname || !email || !phoneNumber || !password || !role) {
       return res.status(400).json({
         message: "fill all feilds",
@@ -19,43 +18,36 @@ export const register = async (req, res) => {
     const file = req.file;
     const fileUri = getDataUri(file);
     const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-    console.log(cloudResponse.url);
-    
-
+    //console.log(cloudResponse.url);
 
     const user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({
         message: "user already exists",
         success: false,
-      });
+      })
     }
-    const hashedpassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     await User.create({
       fullname,
       email,
       phoneNumber,
-      password: hashedpassword,
+      password: hashedPassword,
       role,
       profile:{
         profilePhoto:cloudResponse.secure_url,
       }
     });
     
-    return res.status(200).json({
+    return res.status(201).json({
       message: "account created successfully",
       success: true,
     });
-    
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "error creating account", success: false });
   }
-};
-
+}
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -65,7 +57,7 @@ export const login = async (req, res) => {
         success: false,
       });
     }
-    console.log(email, password, role);
+    //console.log(email, password, role);
     let user = await User.findOne({ email });
     if (!user) {
       return res
@@ -87,9 +79,8 @@ export const login = async (req, res) => {
     }
 
     const tokenData = {
-      userId: user._id,
-    };
-
+      userId: user._id
+    }
     const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "7d",
     });
@@ -111,14 +102,12 @@ export const login = async (req, res) => {
         samesite: "strict",
       })
       .json({
-        message: "login success",
+        message: `Welcome back ${user.fullname}`,
         user,
         success: true,
-        token: token,
       });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "login failed" });
   }
 };
 
@@ -130,7 +119,6 @@ export const logout = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "logout failed" });
   }
 };
 
@@ -138,10 +126,10 @@ export const updateProfile = async (req, res) => {
   try {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
-    const fileURI = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileURI.content);
+    const fileUri = getDataUri(file);
+    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
-    console.log(fullname, email, phoneNumber, bio, skills);
+    // console.log(fullname, email, phoneNumber, bio, skills);
 
     let skillsArray;
     if (skills) skillsArray = skills.split(",");
@@ -155,17 +143,17 @@ export const updateProfile = async (req, res) => {
       });
     }
 
-    if (fullname) user.fullname = fullname;
-    if (email) user.email = email;
-    if (phoneNumber) user.phoneNumber = phoneNumber;
-    if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
+    if (fullname) user.fullname = fullname
+    if (email) user.email = email
+    if (phoneNumber) user.phoneNumber = phoneNumber
+    if (bio) user.profile.bio = bio
+    if (skills) user.profile.skills = skillsArray
 
     if(cloudResponse){
-      user.profile.resume = cloudResponse.secure_url;
-      user.profile.resumeOriginalName = file.originalname;
+      user.profile.resume = cloudResponse.secure_url
+      user.profile.resumeOriginalName = file.originalname
     }
-    console.log(user.profile.resumeOriginalName);
+    //console.log(user.profile.resumeOriginalName);
 
     await user.save();
     user = {
@@ -184,6 +172,5 @@ export const updateProfile = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "update profile failed" });
   }
-};
+}
