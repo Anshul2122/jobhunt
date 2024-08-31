@@ -10,13 +10,14 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   useGetAllJobs();
+  
+  const { user } = useSelector(store => store.auth);
   const navigate = useNavigate();
-  const {user} = useSelector(store=>store.auth);
   useEffect(()=>{
-    if(user?.role==='recruiter'){
+    if (user?.role === 'recruiter'){
       navigate('/admin/companies');
     }
-  },[]);
+  }, []);
   return (
     <div>
       <Navbar />
@@ -25,7 +26,7 @@ const Home = () => {
       <LatestJobs />
       <Footer />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

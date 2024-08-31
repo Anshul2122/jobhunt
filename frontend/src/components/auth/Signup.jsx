@@ -21,25 +21,23 @@ const Signup = () => {
     role: "",
     file: "",
   });
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
   const { loading, user } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-
   const changeFileHandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
   };
-
-  const submithandler = async (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("fullname", input.fullname);
     formData.append("email", input.email);
-    formData.append("password", input.password);
     formData.append("phoneNumber", input.phoneNumber);
+    formData.append("password", input.password);
     formData.append("role", input.role);
     if (input.file) {
       formData.append("file", input.file);
@@ -48,9 +46,7 @@ const Signup = () => {
     try {
       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+        headers: {"Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
       if (res.data.success) {
@@ -63,19 +59,18 @@ const Signup = () => {
     } finally {
       dispatch(setLoading(false));
     }
-    useEffect(()=>{
-      if(user){
-        navigate("/");
-      }
-    },[]);
   };
-
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, []);
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
-          onSubmit={submithandler}
+          onSubmit={submitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-4 my-10 shadow-2xl"
         >
           <h1 className="font-bold text-xl mb-5">Sign Up</h1>

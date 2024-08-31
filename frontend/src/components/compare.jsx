@@ -50,7 +50,6 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     if (input.file) {
       formData.append("file", input.file);
     }
-    console.log(input);
     try {
       setLoading(true);
       const res = await axios.post(
@@ -70,9 +69,9 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
-    } finally{
+    } finally {
       setLoading(false);
-  }
+    }
     setOpen(false);
     console.log(input);
   };
@@ -89,7 +88,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
           </DialogHeader>
           <form onSubmit={submitHandler}>
             <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                   Name
                 </Label>
@@ -102,7 +101,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="email" className="text-right">
                   Email
                 </Label>
@@ -112,10 +111,10 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   type="email"
                   value={input.email}
                   onChange={changeEventHandler}
-                   className="col-span-3"
+                  className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="number" className="text-right">
                   Number
                 </Label>
@@ -127,7 +126,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="bio" className="text-right">
                   Bio
                 </Label>
@@ -139,7 +138,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="skills" className="text-right">
                   Skills
                 </Label>
@@ -151,7 +150,7 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                   className="col-span-3"
                 />
               </div>
-              <div className="grid grid-cols-4 items-center gap-4 ">
+              <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="file" className="text-right">
                   Resume
                 </Label>
@@ -165,15 +164,15 @@ const UpdateProfileDialog = ({ open, setOpen }) => {
                 />
               </div>
             </div>
-            <DialogFooter className="mx-40">
+            <DialogFooter>
               {loading ? (
-                <Button variant="outling" className="w-fit my-4">
+                <Button className="w-full my-4">
                   {" "}
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Saving...
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
                 </Button>
               ) : (
-                <Button type="submit" className="bg-blue-700 hover:bg-blue-900">
-                  Save
+                <Button type="submit" className="w-full my-4">
+                  Update
                 </Button>
               )}
             </DialogFooter>

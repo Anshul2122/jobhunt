@@ -18,14 +18,15 @@ const Login = () => {
     password: "",
     role: "",
   });
+  const { loading, user } = useSelector((store) => store.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  const navigate = useNavigate();
-  const { loading, user } = useSelector((store) => store.auth);
-  const dispatch = useDispatch();
-  const submithandler = async (e) => {
+  
+  const submitHandler = async (e) => {
     e.preventDefault();
     console.log(input);
     try {
@@ -42,24 +43,23 @@ const Login = () => {
         toast.success(res.data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message);
       console.log(error);
+      toast.error(error.response.data.message);
     } finally {
       dispatch(setLoading(false));
     }
-    useEffect(()=>{
-      if(user){
-        navigate("/");
-        toast.success("Welcome back!");
-      }
-    },[]);
   };
+  useEffect(()=>{
+    if(user){
+      navigate("/");
+    }
+  }, []);
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
-          onSubmit={submithandler}
+          onSubmit={submitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-4 my-10 shadow-2xl"
         >
           <h1 className="font-bold text-xl mb-5">Login</h1>
@@ -107,15 +107,15 @@ const Login = () => {
           </div>
           {loading ? (
             <Button>
+              {" "}
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              loading...
+              loading...{" "}
             </Button>
           ) : (
             <Button type="submit" className="bg-blue-700 hover:bg-blue-900">
               Login
             </Button>
           )}
-
           <p className="my-2">
             don't have account?{" "}
             <span className="text-blue-700 hover:underline">
