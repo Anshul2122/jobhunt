@@ -1,10 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./App.css";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
 import Home from "./pages/Home";
-import { Provider } from "react-redux";
-import Job from "./pages/Jobs";
+
+import Jobs from "./pages/Jobs";
 import Browse from "./pages/Browse";
 import Profile from "./pages/Profile";
 import JobDescription from "./pages/JobDescription";
@@ -32,7 +31,11 @@ const appRouter = createBrowserRouter([
   },
   {
     path: "/jobs",
-    element: <Job />,
+    element: <Jobs />,
+  },
+  {
+    path: "/description/:id",
+    element: <JobDescription />,
   },
   {
     path: "/browse",
@@ -42,11 +45,6 @@ const appRouter = createBrowserRouter([
     path: "/profile",
     element: <Profile />,
   },
-  {
-    path: "/description/:id",
-    element: <JobDescription />,
-  },
-
   // admin routes pages:
 
   {
@@ -76,10 +74,10 @@ const appRouter = createBrowserRouter([
 ]);
 function App() {
   return (
-    <>
+    <div>
       <RouterProvider router={appRouter} />
-    </>
+    </div>
   );
 }
 
-export default App;
+export default App

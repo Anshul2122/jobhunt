@@ -8,6 +8,7 @@ import { COMPANY_API_END_POINT } from "@/utils/constant";
 import { toast } from "sonner";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { setSingleCompany } from "@/redux/companySlice";
 
 const CompanyCreate = () => {
   const navigate = useNavigate();
@@ -15,32 +16,27 @@ const CompanyCreate = () => {
   const dispatch = useDispatch();
   const registerNewCompany = async () => {
     try {
-      const res = await axios.post(
-        `${COMPANY_API_END_POINT}/register`,
-        { companyName },
-        {
-          headers: {
-            "Content-Type": "application/json",
+      const res = await axios.post(`${COMPANY_API_END_POINT}/register`, { companyName }, {
+          headers:{
+            "Content-Type":"application/json",
           },
           withCredentials: true,
-        }
-      );
-
+        });
       if (res?.data?.success) {
         dispatch(setSingleCompany(res.data.company));
         toast.success(res.data.message);
-        const companyID = res?.data?.companyId?._id;
-        navigate(`/admin/companies/${companyID}`);
+        const companyId = res?.data?.company?._id;
+        navigate(`/admin/companies/${companyId}`);
       }
     } catch (error) {
       console.log(error);
       toast.error(error.response.data.message);
     }
-  };
+  }
   return (
     <div>
       <Navbar />
-      <div className="max-w-4xl mx-2">
+      <div className="max-w-4xl mx-auto">
         <div className="my-10">
           <h1 className="font-bold text-2xl">Your Company Name</h1>
           <p className="text-gray-500">
@@ -48,13 +44,11 @@ const CompanyCreate = () => {
             later.
           </p>
         </div>
-        <h1 className="">Your Company Name</h1>
-      </div>
-      <div className="mx-3">
+
         <Label>Company Name</Label>
         <Input
           type="text"
-          className="my-2 max-w-fit"
+          className="my-2"
           placeholder="JobHunt, Microsoft etc."
           onChange={(e) => setCompanyName(e.target.value)}
         />

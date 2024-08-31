@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
-import Navbar from './../shared/Navbar';
+import Navbar from '../shared/Navbar';
 import ApplicantsTable from './ApplicantsTable';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { APPLICATION_API_END_POINT } from './../../utils/constant';
+import { APPLICATION_API_END_POINT } from '../../utils/constant';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAllApplicants } from '@/redux/applicationSlice';
+import { setAllApplicants } from '../../redux/applicationSlice';
 
 const Applicants = () => {
     const params = useParams();
@@ -21,12 +21,12 @@ const Applicants = () => {
             }
         }
         fetchAllApplicants();
-    },[])
+    },[]);
   return (
     <div>
         <Navbar/>
         <div className='max-w-7xl mx-3'>
-            <h1 className='font-bold text-3xl'>Applicants ({applicants.applications.length})</h1>
+            <h1 className='font-bold text-3xl'>Applicants ({applicants?.applications?.length})</h1>
             <ApplicantsTable/>
         </div>
     </div>

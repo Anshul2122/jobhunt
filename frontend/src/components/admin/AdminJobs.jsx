@@ -1,17 +1,19 @@
-import Navbar from '@/components/shared/Navbar'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import React, { useEffect, useState } from 'react'
+import Navbar from '@/components/shared/Navbar'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import useGetAllAdminJobs from "@hooks/useGetAllAdminJobs"
+
+import AdminJobsTable from './AdminJobsTable' 
+import useGetAllAdminJobs from '../../hooks/useGetAllAdminJobs'
 import { setSearchJobByText } from '@/redux/jobSlice'
 
 const AdminJobs = () => {
     useGetAllAdminJobs();
-    const navigate = useNavigate();
     const [input, setInput] = useState("");
-    const dispatch =  useDispatch();
+    const navigate = useNavigate();    
+    const dispatch = useDispatch();
 
     useEffect(()=>{
       dispatch(setSearchJobByText(input));
@@ -34,7 +36,7 @@ const AdminJobs = () => {
             New Job
           </Button>
         </div>
-        {/* <CompaniesTable /> */}
+         <AdminJobsTable /> 
       </div>
     </div>
   );

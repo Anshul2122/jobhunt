@@ -8,7 +8,7 @@ const filterData = [
     filterType: "Loaction",
     array: [
       "Dehli NCR",
-      "Bangalore",
+      "Bangalore", 
       "Hyderabad",
       "Pune",
       "Mumbai",
