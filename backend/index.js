@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.FRONTEND_URL,
   credentials: true,
   method: ["GET", "POST", "PUT", "DELETE"],
 };
@@ -27,19 +27,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // Log each request route
-// app.use((req, res, next) => {
-//   console.log(
-//     "----------------------------------------------------------------------------------"
-//   );
-//   console.log(`Route being hit: ${req.method} ${req.path}`);
-//   console.log("Req Body", req.body);
-//   console.log("Req Params", req.params);
-//   console.log("Req Query", req.query);
-//   console.log(
-//     "----------------------------------------------------------------------------------"
-//   );
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log(
+    "----------------------------------------------------------------------------------"
+  );
+  console.log(`Route being hit: ${req.method} ${req.path}`);
+  console.log("Req Body", req.body);
+  console.log("Req Params", req.params);
+  console.log("Req Query", req.query);
+  console.log(
+    "----------------------------------------------------------------------------------"
+  );
+  next();
+});
 
 //route handlers
 app.use("/api/v1/user", userRoute);

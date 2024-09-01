@@ -16,6 +16,8 @@ const Navbar = () => {
   const navigate = useNavigate();
  
   const logoutHandler = async () => {
+    console.log('clicked')
+    console.log(USER_API_END_POINT);
     try {
       const res = await axios.get(`${USER_API_END_POINT}/logout`, {
         withCredentials: true,
@@ -31,11 +33,11 @@ const Navbar = () => {
     }
   };
   return (
-    <div className='bg-white'>
+    <div className='bg-white shadow-md'>
       <div className='flex items-center justify-between mx-auto max-w-7xl h-16'>
         <div>
           <h1 className='text-2xl font-bold'>
-            Job<span className='text-[#F83002]'>Portal</span>
+            <span className='text-blue-600 cursor-pointer' onClick={()=> navigate('/')}>Seekr</span>
           </h1>
         </div>
         <div className='flex items-center gap-12'>
@@ -69,7 +71,7 @@ const Navbar = () => {
                 <Button variant="outline">Login</Button>
               </Link>
               <Link to="/signup">
-                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">
+                <Button className="bg-blue-600 hover:bg-blue-900">
                   Signup
                     </Button>
               </Link>
@@ -85,7 +87,7 @@ const Navbar = () => {
                 </Avatar>
               </PopoverTrigger>
               <PopoverContent className="w-80">
-                <div className=''>
+                <div>
                   <div className='flex gap-2 space-y-2'>
                     <Avatar className="cursor-pointer">
                       <AvatarImage
@@ -105,7 +107,6 @@ const Navbar = () => {
                       <div className='flex w-fit items-center gap-2 cursor-pointer'>
                         <User2 />
                         <Button variant="link"> 
-                        {" "}
                           <Link to="/profile">View Profile</Link>
                         </Button>
                       </div>

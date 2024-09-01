@@ -7,7 +7,7 @@ export const postJob = async (req, res) => {
       description,
       requirements,
       salary,
-      experienceLevel,
+      experience,
       location,
       jobType,
       position,

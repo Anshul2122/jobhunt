@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import {JOB_API_END_POINT} from "../utils/constant.js";
 import {APPLICATION_API_END_POINT}  from "../utils/constant.js";
 import { toast } from "sonner";
+import { Badge } from "lucide-react";
 
 const JobDescription = () => {
   const {singleJob} = useSelector(store=>store.job);
@@ -56,11 +57,6 @@ const JobDescription = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-bold  text-3xl">{singleJob?.title}</h1>
-            <div className='flex items-center gap-2 mt-4'>
-              <Badge className={'text-gray-400 font-bold'} variant="ghost">{singleJob?.postion} Positions</Badge>
-              <Badge className={'text-gray-400 font-bold'} variant="ghost">{singleJob?.jobType}</Badge>
-              <Badge className={'text-gray-400 font-bold'} variant="ghost">{singleJob?.salary} Lpa</Badge>
-            </div>
           </div>
           <Button 
           onClick={isApplied ? null : applyJobHandler}

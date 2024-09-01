@@ -17,7 +17,7 @@ const Job = ({ job }) => {
 }
   
   return (
-    <div className="p-5 ml-2 rounded-md shadow-xl bg-white border-gray-400 mt-2">
+    <div onClick={() => navigate(`/description/${job?._id}`)}  className="p-5 ml-2 rounded-md shadow-xl bg-white border-gray-400 mt-2 cursor-pointer">
       <div className="flex items-center justify-between gap-4 border-gray-300">
         <p className="text-sm font-semibold text-gray-400">
           {daysAgoFunction(job?.created)===0 

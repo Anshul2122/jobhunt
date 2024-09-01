@@ -12,6 +12,7 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Edit2, MoreHorizontal } from "lucide-react";
 import { useSelector } from 'react-redux'
 import { useNavigate } from "react-router-dom";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const CompaniesTable = () => { 
   const {companies, searchCompanyByText} = useSelector(store=>store.company);
