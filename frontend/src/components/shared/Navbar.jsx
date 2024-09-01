@@ -2,7 +2,7 @@ import React from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { LogOut, User2 } from "lucide-react";
+import { Bookmark, LogOut, User2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -61,6 +61,9 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link to="/browse">Browse</Link>
+                </li>
+                <li>
+                  <Link to="/savedJobs">saved jobs</Link>
                 </li>
               </>
             )}

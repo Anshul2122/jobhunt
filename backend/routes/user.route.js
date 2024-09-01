@@ -3,6 +3,7 @@ import {
   login,
   logout,
   register,
+  SaveJobs,
   updateProfile,
 } from "../controllers/user.controller.js";
 
@@ -15,5 +16,6 @@ router.post("/register", singleUpload, register);
 router.post("/login", login);
 router.get("/logout", logout);
 router.post("/profile/update", isAuthenticated, singleUpload, updateProfile);
+router.post("/saveJobs/:jobId",isAuthenticated, SaveJobs)
 
 export default router;

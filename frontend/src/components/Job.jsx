@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Bookmark } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constant";
+import { toast } from "sonner";
 
 const style = "text-gray-400 font-bold";
 const Job = ({ job }) => {
   const navigate = useNavigate();
+  const [isSaved, setIsSaved] = useState(false);
 
   const daysAgoFunction = (mongodbTime) => {
     const createdAt = new Date(mongodbTime);
     const currentTime = new Date();
     const timeDifference = currentTime - createdAt;
     return Math.floor(timeDifference/(1000*24*60*60));
+}
+const handleSaveJob = async () =>{  
+    try {
+      const res = await axios.post(`${USER_API_END_POINT}/saveJobs`, {withCredentials:true});
+      if(res.data.success){
+        setIsSaved(res.data);
+        console.log("job saved successfully");
+        toast.success("job saved");
+        
+      }
+    } catch (error) {
+      console.log("job save error : ",error);
+    }
 }
   
   return (
@@ -63,8 +80,8 @@ const Job = ({ job }) => {
         >
           Details
         </Button>
-        <Button variant="outline" className="bg-blue-700 text-white hover:bg-blue-900 hover:text-white w-20">
-          Save
+        <Button onClick={handleSaveJob}  disabled = {isSaved} variant="outline" className="bg-blue-700 text-white hover:bg-blue-900 hover:text-white w-20">
+          {isSaved? "saved" : "save"}
         </Button>
       </div>
     </div>

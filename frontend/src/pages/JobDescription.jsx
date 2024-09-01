@@ -8,9 +8,10 @@ import { useParams } from "react-router-dom";
 import {JOB_API_END_POINT} from "../utils/constant.js";
 import {APPLICATION_API_END_POINT}  from "../utils/constant.js";
 import { toast } from "sonner";
-import { Badge } from "lucide-react";
+import { USER_API_END_POINT } from "@/utils/constant";
 
 const JobDescription = () => {
+  const [isSaved, setIsSaved] = useState(false);
   const {singleJob} = useSelector(store=>store.job);
   const { user } = useSelector(store => store.auth);
   const isIntiallyApplied = singleJob?.applications?.some(application=>application.applicant===user?._id) && false;
@@ -19,6 +20,31 @@ const JobDescription = () => {
   const params = useParams();
   const jobId = params.id;
   const dispatch = useDispatch();
+  const token = localStorage.getItem('token');
+    const handleSaveJob = async () =>{  
+      
+      console.log(jobId);
+      try {
+        if (!token) {
+          throw new Error('Token not found. Please log in again.');
+        }
+        const res = await axios.post(`${USER_API_END_POINT}/saveJobs/${jobId}`, {}, {
+
+          withCredentials: true,
+        });
+        
+        console.log(res.data);
+        if(res.data.success){
+          setIsSaved(res.data);
+          console.log("job saved successfully");
+          toast.success("job saved");
+          
+        }
+      } catch (error) {
+        console.log("token: ",token);
+        console.log("job save error : ",error);
+      }
+  }
   
   const applyJobHandler = async() =>{
     try {
@@ -53,17 +79,25 @@ const JobDescription = () => {
   return (
     <div>
       <Navbar />
-      <div className="max-w-7xl mx-2 my-10">
+      <div className="max-w-7xl mx-2 my-10 ml-5">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-bold  text-3xl">{singleJob?.title}</h1>
           </div>
+          <div className="flex gap-3">
           <Button 
           onClick={isApplied ? null : applyJobHandler}
             disabled={isApplied}
             className={`rounded-lg ${isApplied ? "bg-gray-600 cursor-not-allowed": "bg-blue-700 hover:bg-blue-900"}`}>
             {isApplied ? "Applied" : "Apply"}
           </Button>
+          <Button 
+          onClick={handleSaveJob}
+            disabled={isSaved}
+            className={`rounded-lg ${isSaved ? "bg-gray-600 cursor-not-allowed": "bg-blue-700 hover:bg-blue-900"}`}>
+            {isSaved ? "saved" : "save"}
+          </Button>
+          </div>
         </div>
         <h1 className="border-b-2 border-b-gray-300 font-medium py-4 ">Job Description</h1>
         <div className="my-4">

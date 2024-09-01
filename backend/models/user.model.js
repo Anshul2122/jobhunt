@@ -33,9 +33,13 @@ const userSchema = new mongoose.Schema(
       company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
       profilePhoto: {
         type: String,
-        default: "",
+        default: "https://cdn-icons-png.flaticon.com/256/17/17004.png",
       },
     },
+    savedjob: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Job",
+    }],
   },
   { timestamps: true }
 );
