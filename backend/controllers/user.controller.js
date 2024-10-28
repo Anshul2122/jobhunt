@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import {Job} from "../models/job.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
@@ -177,25 +178,28 @@ export const updateProfile = async (req, res) => {
 
 
 export const SaveJobs = async(req, res) =>{
+  const userId = req.id;
+    // console.log(userId);
+    const {jobId} = req.body;
+    // console.log(jobId);
   try {
-    const userId = req.id;
-    let user = await User.findById(userId);
+    const job = await Job.findById(jobId);
+    if(!job){
+      return res.status(404).json({message: "job not found"});
+    }
+    const user = await User.findByIdAndUpdate(userId, 
+      {$addToSet:{savedjob:jobId}},
+      {new:true}
+    );
     
     if(!user){
       return res.status(404).json({message: "user not found"});
     }
-    const {jobId} = req.params;
-    if(!user.savedjob){
-      user.savedjob = [];
-    }
-    if(user.savedjob.includes(jobId)){
-      return res.status(400).json({message:"job already saved"});
-    }
-    user.savedjob.push(jobId);
-    await user.save();
-    return res.status(200).json({message:"job saved successfully"})
+
+    
+    return res.status(200).json({message:"job saved successfully", savedjob:user.savedjob})
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({message:"intern error"})
+      console.log(error);
+      return res.status(500).json({message:"intern error"})
   }
 }

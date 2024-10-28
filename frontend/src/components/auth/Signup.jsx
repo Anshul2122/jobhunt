@@ -50,7 +50,7 @@ const Signup = () => {
         withCredentials: true,
       });
       if (res.data.success) {
-        navigate("/");
+        navigate("/login");
         toast.success(res.data.message);
       }
     } catch (error) {
